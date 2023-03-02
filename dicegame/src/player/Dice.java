@@ -13,6 +13,10 @@ public class Dice {
                 CustomRandom.createCustomRandom(MIN, MAX);
     }
 
+    public int getDiceNumber() {
+        return diceNumber;
+    }
+
     @Override
     public String toString() {
         return "Dice{" +
