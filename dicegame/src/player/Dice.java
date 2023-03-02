@@ -12,4 +12,11 @@ public class Dice {
         this.diceNumber =
                 CustomRandom.createCustomRandom(MIN, MAX);
     }
+
+    @Override
+    public String toString() {
+        return "Dice{" +
+                "diceNumber=" + diceNumber +
+                '}';
+    }
 }
