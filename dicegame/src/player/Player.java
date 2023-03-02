@@ -7,11 +7,18 @@ public class Player {
     final private Dice generalDice;
     final private Dice specialDice;
 
+    private int totalDiceScore;
+
     public Player(Long playerId, String nickname) {
         this.playerId = playerId;
         this.nickname = nickname;
         this.generalDice = new Dice();
-        this.specialDice = new Dice();
+
+        if (generalDice.getDiceNumber() % 2 == 0) {
+            this.specialDice = new Dice();
+        } else {
+            this.specialDice = new Dice(0);
+        }
     }
 
     @Override
@@ -21,7 +28,7 @@ public class Player {
                 ", nickname='" + nickname + '\'' +
                 ", generalDice=" + generalDice +
                 ", specialDice=" + specialDice +
-                '}';
+                '}' + '\n';
     }
 
     public int getGeneralDiceNumber() {
@@ -30,5 +37,18 @@ public class Player {
 
     public int getSpecialDiceNumber() {
         return specialDice.getDiceNumber();
+    }
+
+    public void calcMyTotalDiceScore () {
+        this.totalDiceScore = generalDice.getDiceNumber() +
+                specialDice.getDiceNumber();
+    }
+
+    public int getTotalDiceScore() {
+        return totalDiceScore;
+    }
+
+    public void setTotalDiceScore(int totalDiceScore) {
+        this.totalDiceScore = totalDiceScore;
     }
 }

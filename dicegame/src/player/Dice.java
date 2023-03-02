@@ -13,6 +13,10 @@ public class Dice {
                 CustomRandom.createCustomRandom(MIN, MAX);
     }
 
+    public Dice (int zero) {
+        this.diceNumber = zero;
+    }
+
     public int getDiceNumber() {
         return diceNumber;
     }

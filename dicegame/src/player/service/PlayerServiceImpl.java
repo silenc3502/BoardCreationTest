@@ -36,29 +36,155 @@ public class PlayerServiceImpl implements PlayerService {
         return playerList.get(currentIdx).getSpecialDiceNumber();
     }
 
+    private SpecialDicePattern checkSpecialDicePattern (
+            int specialDice, List<Player> playerList, int currentIdx) {
+
+        if (specialDice == SpecialDicePattern.PATTERN_DEATH.getValue())
+            return SpecialDicePattern.PATTERN_DEATH;
+
+        if (specialDice == SpecialDicePattern.PATTERN_STEAL.getValue())
+            return SpecialDicePattern.PATTERN_STEAL;
+
+        if (specialDice == SpecialDicePattern.PATTERN_DONATE.getValue())
+            return SpecialDicePattern.PATTERN_DONATE;
+
+        if (specialDice == SpecialDicePattern.PATTERN_BUDDY_FUCKER.getValue())
+            return SpecialDicePattern.PATTERN_BUDDY_FUCKER;
+
+        return SpecialDicePattern.PATTERN_NOTHING;
+    }
+
+    private int calcTotalDiceNumber (List<Player> playerList, int currentIdx) {
+        return playerList.get(currentIdx).getGeneralDiceNumber() +
+                playerList.get(currentIdx).getSpecialDiceNumber();
+    }
+
+    private int howMuchCanWeSteal (int myDiceNumber, int targetDiceNumber) {
+        final int STEAL_SCORE = 3;
+
+        if (targetDiceNumber - STEAL_SCORE >= 0) {
+            return STEAL_SCORE;
+        } else if (targetDiceNumber - STEAL_SCORE == -3) {
+            System.out.println("뺏을 점수가 없음");
+            return 0;
+        } else {
+            return targetDiceNumber;
+        }
+    }
+
+    private void stealEachPlayerScore (List<Player> playerList, int currentIdx) {
+
+        int myDiceNumber = calcTotalDiceNumber(playerList, currentIdx);
+
+        for (int i = 0; i < playerList.size(); i++) {
+            if (i == currentIdx) { continue; }
+
+            int targetDiceNumber = calcTotalDiceNumber(playerList, i);
+
+            myDiceNumber += howMuchCanWeSteal(myDiceNumber, targetDiceNumber);
+        }
+
+        playerList.get(currentIdx).setTotalDiceScore(myDiceNumber);
+    }
+
+    private void doDonate (int myDiceNumber, List<Player> playerList, int currentIdx) {
+        final int DONATE_SCORE = 2;
+
+        for (int i = 0; i < playerList.size(); i++) {
+            if (i == currentIdx) { continue; }
+
+            int targetTotalScore = playerList.get(i).getTotalDiceScore();
+            int donationValue = 0;
+
+            if (myDiceNumber >= DONATE_SCORE) {
+                myDiceNumber -= DONATE_SCORE;
+                donationValue = DONATE_SCORE;
+            } else if (myDiceNumber > 0) {
+                myDiceNumber -= DONATE_SCORE;
+                donationValue = 1;
+            } else {
+                System.out.println("기부 불가");
+                donationValue = 0;
+                myDiceNumber = 0;
+            }
+
+            playerList.get(i).setTotalDiceScore(targetTotalScore + donationValue);
+            playerList.get(currentIdx).setTotalDiceScore(myDiceNumber);
+        }
+    }
+
+    private void donateToEachPlayer (List<Player> playerList, int currentIdx) {
+        final int DONATE_SCORE = 2;
+
+        int myDiceNumber = calcTotalDiceNumber(playerList, currentIdx);
+
+        doDonate(myDiceNumber, playerList, currentIdx);
+    }
+
+    private void postProcessAfterGetPattern (
+            SpecialDicePattern dicePattern,
+            List<Player> playerList,
+            int currentIdx
+    ) {
+
+            //int myDiceNumber = calcTotalDiceNumber(playerList, currentIdx);
+            //int targetDiceNumber;
+
+            if (dicePattern == SpecialDicePattern.PATTERN_DEATH)
+                ;
+
+            // 상대방의 Dice를 보고 뺏어와야함(없으면 뺏을것이 없는 상태이기도함)
+            if (dicePattern == SpecialDicePattern.PATTERN_STEAL)
+                stealEachPlayerScore(playerList, currentIdx);
+
+            if (dicePattern == SpecialDicePattern.PATTERN_DONATE)
+                donateToEachPlayer(playerList, currentIdx);
+
+            if (dicePattern == SpecialDicePattern.PATTERN_BUDDY_FUCKER)
+                ;
+
+            if (dicePattern == SpecialDicePattern.PATTERN_NOTHING) {
+                playerList.get(currentIdx).setTotalDiceScore(
+                        calcTotalDiceNumber(playerList, currentIdx));
+            }
+
+    }
+
     private void applyEachPlayer (List<Player> playerList, int currentIdx) {
+        /*
         if (isEven(playerList, currentIdx)) {
 
             int specialDice = getSpecialDiceNumber(playerList, currentIdx);
 
-            if (specialDice == SpecialDicePattern.PATTERN_DEATH.getValue()) {
-                System.out.println(SpecialDicePattern.PATTERN_DEATH.getName());
-            } else if (specialDice == SpecialDicePattern.PATTERN_STEAL.getValue()) {
-                System.out.println(SpecialDicePattern.PATTERN_STEAL.getName());
-            } else if (specialDice == SpecialDicePattern.PATTERN_BORROW.getValue()) {
-                System.out.println(SpecialDicePattern.PATTERN_BORROW.getName());
-            } else if (specialDice == SpecialDicePattern.PATTERN_BUDDY_FUCKER.getValue()) {
-                System.out.println(SpecialDicePattern.PATTERN_BUDDY_FUCKER.getName());
-            } else {
-                System.out.println("특수 동작 없음: " + specialDice);
-            }
+            SpecialDicePattern dicePattern =
+                    checkSpecialDicePattern(specialDice, playerList, currentIdx);
+
+            System.out.println("pattern: " + dicePattern.getName() +
+                    "value: " + dicePattern.getValue());
+
+            postProcessAfterGetPattern(dicePattern, playerList, currentIdx);
         }
+         */
+
+        int specialDice = getSpecialDiceNumber(playerList, currentIdx);
+
+        SpecialDicePattern dicePattern =
+                checkSpecialDicePattern(specialDice, playerList, currentIdx);
+
+        System.out.println("pattern: " + dicePattern.getName() +
+                "value: " + dicePattern.getValue());
+
+        postProcessAfterGetPattern(dicePattern, playerList, currentIdx);
     }
     @Override
     public Boolean playDiceGame(List<Player> playerList) {
         for (int i = 0; i < playerList.size(); i++) {
             System.out.println("player" + (i + 1) + ": ");
             applyEachPlayer(playerList, i);
+        }
+
+        for (int i = 0; i < playerList.size(); i++) {
+            System.out.println("총합: " + playerList.get(i).getTotalDiceScore());
         }
 
         return false;
