@@ -1,3 +1,4 @@
+import dice.SpecialDice;
 import player.Player;
 import player.service.PlayerService;
 import player.service.PlayerServiceImpl;
@@ -29,6 +30,8 @@ public class Main {
         Player winner = playerService.findWinner(playerList);
 
         System.out.println("winner: " + winner);
+
+        SpecialDice sd = new SpecialDice();
     }
 
     public static void addPlayer(List<Player> playerList, Player player) {

@@ -12,4 +12,8 @@ public class Dice {
         this.diceNumber =
                 CustomRandom.createCustomRandom(MIN, MAX);
     }
+
+    public int getDiceNumber() {
+        return diceNumber;
+    }
 }
