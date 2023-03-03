@@ -1,5 +1,7 @@
 package player;
 
+import dice.Dice;
+
 public class Player {
 
     final private Long playerId;

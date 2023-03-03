@@ -1,4 +1,4 @@
-package player;
+package dice;
 
 import utility.CustomRandom;
 

@@ -1,4 +1,4 @@
-package player;
+package dice;
 
 public enum SpecialDicePattern {
     PATTERN_DEATH("죽었음", 4),
