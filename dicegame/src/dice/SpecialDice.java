@@ -18,4 +18,20 @@ public class SpecialDice {
         specialDicePattern = Arrays.stream(patterns).filter(elem -> elem.getValue() == diceNumber).
                 findAny().orElse(SpecialDicePattern.PATTERN_NOTHING);
     }
+
+    public int getDiceNumber() {
+        return diceNumber;
+    }
+
+    public SpecialDicePattern getSpecialDicePattern() {
+        return specialDicePattern;
+    }
+
+    @Override
+    public String toString() {
+        return "SpecialDice{" +
+                "diceNumber=" + diceNumber +
+                ", specialDicePattern=" + specialDicePattern +
+                '}';
+    }
 }

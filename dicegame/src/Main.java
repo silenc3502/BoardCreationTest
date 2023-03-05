@@ -1,9 +1,11 @@
+import dice.DiceManager;
 import dice.SpecialDice;
+import dice.service.DiceService;
+import dice.service.DiceServiceImpl;
 import player.Player;
 import player.service.PlayerService;
 import player.service.PlayerServiceImpl;
 import utility.AutoIncrementGenerator;
-import utility.CustomRandom;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,30 +13,36 @@ import java.util.List;
 public class Main {
     final public static int PLAYER_MAX = 3;
 
-    public static void main(String[] args) {
-        PlayerService playerService = new PlayerServiceImpl();
+    final private static PlayerService playerService = new PlayerServiceImpl();
+    final private static DiceService diceService = new DiceServiceImpl();
 
+    private static void autoIncrementEnvironmentSet () {
         AutoIncrementGenerator.setAutoIncrementEntity("Player");
-        List<Player> playerList = new ArrayList<>();
-
-        for (int i = 0; i < PLAYER_MAX; i++) {
-            Player player = new Player(
-                    AutoIncrementGenerator.getEntityAutoIncrementValue("Player"),
-                    "Player" + (i + 1)
-            );
-            addPlayer(playerList, player);
-        }
-        System.out.println(playerList);
-
-        playerService.playDiceGame(playerList);
-        Player winner = playerService.findWinner(playerList);
-
-        System.out.println("winner: " + winner);
-
-        SpecialDice sd = new SpecialDice();
+        AutoIncrementGenerator.setAutoIncrementEntity("DiceManager");
     }
 
-    public static void addPlayer(List<Player> playerList, Player player) {
-        playerList.add(player);
+    public static void main(String[] args) {
+
+        autoIncrementEnvironmentSet();
+
+        for (int i = 0; i < PLAYER_MAX; i++) {
+            playerService.createPlayer("Tester" + (i + 1));
+            diceService.rollDice(playerService.findByPlayerId(i + 1L));
+        }
+        List<Player> playerList = playerService.getAllPlayers();
+        List<DiceManager> diceManagerList = diceService.getAllDiceInfo();
+        System.out.println(diceManagerList);
+
+        playerService.calculateTotalDiceScore(playerList);
+        playerService.applySpecialDice(playerList);
+        System.out.println(playerList);
+
+        Player winner = playerService.findWinner(playerList);
+
+        if (winner != null) {
+            System.out.println("winner: " + winner);
+        } else {
+            System.out.println("무승부!");
+        }
     }
 }

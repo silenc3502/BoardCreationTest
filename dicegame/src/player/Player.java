@@ -6,8 +6,6 @@ public class Player {
 
     final private Long playerId;
     final private String nickname;
-    final private Dice generalDice;
-    final private Dice specialDice;
 
     private int totalDiceScore;
     private boolean isAlive;
@@ -15,17 +13,37 @@ public class Player {
     public Player(Long playerId, String nickname) {
         this.playerId = playerId;
         this.nickname = nickname;
-        this.generalDice = new Dice();
-        this.specialDice = new Dice();
+
+        this.isAlive = true;
+    }
+
+    public Long getPlayerId() {
+        return playerId;
+    }
+
+    public void setTotalDiceScore(int totalDiceScore) {
+        this.totalDiceScore = totalDiceScore;
+    }
+
+    public int getTotalDiceScore() {
+        return totalDiceScore;
+    }
+
+    public void setAlive(boolean alive) {
+        isAlive = alive;
+    }
+
+    public boolean isAlive() {
+        return isAlive;
     }
 
     @Override
     public String toString() {
         return "Player{" +
                 "playerId=" + playerId +
-                ", nickname='" + nickname + '\'' +
-                ", generalDice=" + generalDice +
-                ", specialDice=" + specialDice +
+                ", nickname='" + nickname +
+                ", totalDiceScore='" + totalDiceScore +
+                ", isAlive='" + isAlive + '\'' +
                 '}' + '\n';
     }
 }
