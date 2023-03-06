@@ -6,8 +6,6 @@ public class Player {
 
     final private Long playerId;
     final private String nickname;
-
-    private int totalDiceScore;
     private boolean isAlive;
 
     public Player(Long playerId, String nickname) {
@@ -19,14 +17,6 @@ public class Player {
 
     public Long getPlayerId() {
         return playerId;
-    }
-
-    public void setTotalDiceScore(int totalDiceScore) {
-        this.totalDiceScore = totalDiceScore;
-    }
-
-    public int getTotalDiceScore() {
-        return totalDiceScore;
     }
 
     public void setAlive(boolean alive) {
@@ -42,7 +32,6 @@ public class Player {
         return "Player{" +
                 "playerId=" + playerId +
                 ", nickname='" + nickname +
-                ", totalDiceScore='" + totalDiceScore +
                 ", isAlive='" + isAlive + '\'' +
                 '}' + '\n';
     }

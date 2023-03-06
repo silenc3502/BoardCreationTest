@@ -9,7 +9,7 @@ public class AutoIncrementGenerator {
 
     public static void setAutoIncrementEntity(String entityName) {
         if (entityNameMappedCurrentId.get(entityName) == null) {
-            entityNameMappedCurrentId.put(entityName, 1L);
+            entityNameMappedCurrentId.put(entityName, 0L);
         } else {
             System.out.println("중복 시켰어!!!");
         }

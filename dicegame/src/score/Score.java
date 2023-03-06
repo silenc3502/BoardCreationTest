@@ -8,9 +8,35 @@ public class Score {
 
     final private Long playerId;
 
-    public Score (Long scoreId, Long playerId) {
+    public Score (Long scoreId, Long playerId, int totalScore) {
         this.scoreId = scoreId;
         this.playerId = playerId;
+        this.totalScore = totalScore;
+    }
+
+    public Long getScoreId() {
+        return scoreId;
+    }
+
+    public Long getPlayerId() {
+        return playerId;
+    }
+
+    public int getTotalScore() {
+        return totalScore;
+    }
+
+    public void setTotalScore(int totalScore) {
+        this.totalScore = totalScore;
+    }
+
+    @Override
+    public String toString() {
+        return "Score{" +
+                "scoreId=" + scoreId +
+                ", totalScore=" + totalScore +
+                ", playerId=" + playerId +
+                '}' + '\n';
     }
 }
 
